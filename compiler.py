@@ -232,8 +232,10 @@ class Compiler:
 
             print(f"creating variable {var} with value {v} at 0x{hex(m)[2:].zfill(8)}")
 
-            self.program_init.append(f"LDI {v}")
-            self.program_init.append(f"MST {binary(m)}")
+            self.program_init.append("LDI 000")
+            self.program_init.append(f"OPR {v}")
+            self.program_init.append("MST 000")
+            self.program_init.append(f"OPR {binary(m)}")
 
         self.program_flag_init_end = len(self.program_init)
 
