@@ -163,6 +163,8 @@ class CPU:
             self.ports = []
             self.ram = []
             self.regs = []
+            self.isa_cache = []
+            self.program = []
 
             self.isa = isa.Isa(self)
             self.display = None
@@ -187,9 +189,79 @@ class CPU:
             self.log("init:\n")
             self.log(f"CPU bits: {self.bits}")
             self.log(f"CPU flags: {self.flags}")
-            self.log(f"CPU registers: {self.regs}")
-            self.log(f"CPU ports: {self.ports}")
+            self.log(f"CPU registers: {self.register_count}")
+            self.log(f"CPU ports: {self.port_count}")
             self.log(f"CPU ram cells: {self.ram_cells}")
+
+            self.load_isa_cache()
+
+        def load_isa_cache(self):
+            self.isa_cache = []
+
+            for instruction in sorted(self.isa.isa, key=lambda k: self.isa.isa[k][0]):
+                self.isa_cache.append(
+                    {
+                        "f": self.isa.isa[instruction][2],
+                        "n": instruction,
+                        "operands": self.isa.isa[instruction][1],
+                    }
+                )
+
+            self.log(f"loaded {len(self.isa_cache)} instructions into isa_cache")
+
+        def load_program(self, program: str):
+            i = 0
+
+            while i < len(program):
+                bin_ins = compiler.binary(ord(program[i]))
+                opcode = int(bin_ins[:5], 2) - 1
+                operand = int(bin_ins[5:], 2)
+
+                if opcode >= len(self.isa_cache):
+                    exit(
+                        f"program byte {i} (value {ord(program[i])}) exceeds isa size {len(self.isa_cache)}"
+                    )
+
+                ins = self.isa_cache[opcode]
+
+                if len(program) - i < ins["operands"]:
+                    exit(
+                        f"program byte {i} requires {ins['operands']} but there are only {len(program) - i} instructions left"
+                    )
+
+                args = []
+
+                args.append(operand)
+
+                for j in range(ins["operands"] - 1):
+                    args.append(ord(program[i + j + 1]))
+
+                self.program.append([ins["f"], args])
+                self.log(f"program += {ins['n']}{args}")
+
+                if ins["operands"] < 2:
+                    i += 1
+                else:
+                    i += ins["operands"]
+
+        def run(self):
+            print("executing CPU")
+
+            last_instruction = 0
+            last_instruction_repeat = 0
+
+            while self.pc < len(self.program) - 1:
+                self.program[self.pc][0](*self.program[self.pc][1])
+
+                if self.pc != last_instruction:
+                    last_instruction = self.pc
+
+                    continue
+
+                last_instruction_repeat += 1
+
+                if last_instruction_repeat > 8:
+                    exit("same instruction repeated 8 times, quitting")
 
         def compile(self, input_path: str, output_path: str):
             print(f"compiling {input_path}")
