@@ -202,9 +202,7 @@ class CPU:
                         continue
 
                     l = self.compiler_parse_line(line)
-
-                    for number in l:
-                        c += chr(int(number, 2))
+                    c += chr(int(l, 2))
 
             print(f"compiled {input_path}. writing output at {output_path} {len(c)}B")
 
@@ -222,7 +220,7 @@ class CPU:
 
                 self.compiler_operands -= 1
 
-                return compiler.binary(int(ins[1]))
+                return compiler.binary(int(ins[1], 2))
 
             if self.compiler_operands > 0:
                 exit(f"error: {ins[0]} called when OPR needed")
