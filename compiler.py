@@ -100,11 +100,20 @@ class Compiler:
 
                 self.math(code[0], code[1], code[2])
             case "set_port":
+                if len(code) <= 2:
+                    self.error("too few arguements for set_port")
+
                 self.get_value(code[2], -1)
                 self.add_instruction(f"PST {binary(self.parse_datatype(code[1]))}")
             case "jump":
+                if len(code) <= 1:
+                    self.error("too few arguements for jump")
+
                 self.add_instruction(f"JMP {binary(self.parse_datatype(code[1]))}")
             case "if":
+                if len(code) <= 4:
+                    self.error("too few arguements for if statement")
+
                 self.handle_condition(code[1], code[3], code[2], code[4])
             case _:
                 self.warn(f"unknown keyword {code[0]}")
