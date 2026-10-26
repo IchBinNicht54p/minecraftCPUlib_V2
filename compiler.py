@@ -16,7 +16,7 @@ def binary(value: int, zeroes=8):
 
 
 class Compiler:
-    def __init__(self):
+    def __init__(self, path="out.54asm"):
         self.constants = {}
         self.variables = {}
         self.functions = {}
@@ -28,6 +28,8 @@ class Compiler:
 
         self.program_flag_init_end = 0
         self.program_flag_variable_index = 0
+
+        self.path = path
 
     def error(self, msg="error"):
         sys.exit(f"error: {msg}")
@@ -236,7 +238,7 @@ class Compiler:
             f"writing {len(self.program) + self.program_flag_variable_index} instructions"
         )
 
-        with open("out.54asm", "w") as f:
+        with open(self.path, "w") as f:
             f.writelines("# init\n\n")
             f.writelines(f"{line}\n" for line in self.program_init)
             f.writelines("\n# program\n\n")
