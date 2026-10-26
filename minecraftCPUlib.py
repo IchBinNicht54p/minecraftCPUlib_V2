@@ -169,6 +169,8 @@ class CPU:
             self.enable_log = log
             self.max_int = (1 << self.bits) - 1
 
+            self.compiler_operands = 0
+
         def log(self, txt: str):
             print(f"{txt}")
 
@@ -209,34 +211,29 @@ class CPU:
             with open(output_path, "w") as f:
                 f.write(c)
 
-        def compiler_parse_line(self, line: str) -> list[str]:
+        def compiler_parse_line(self, line: str) -> str:
             ins = line.split()
+
+            if ins[0].lower() == "opr":
+                if self.compiler_operands <= 0:
+                    exit(
+                        f"error: opr called when {self.compiler_operands + 1} operands are needed"
+                    )
+
+                self.compiler_operands -= 1
+
+                return compiler.binary(int(ins[1]))
+
+            if self.compiler_operands > 0:
+                exit(f"error: {ins[0]} called when OPR needed")
 
             if not ins[0].lower() in self.isa.isa:
                 exit(f"opcode {ins[0].lower()} not found in isa")
 
             opcode = self.isa.isa[ins[0].lower()]
-            operand_count = opcode[1]
-            converted = [compiler.binary(opcode[0], 5)]
+            self.compiler_operands = opcode[1] - 1
 
-            if operand_count != len(ins) - 1:
-                exit(
-                    f"opcode {ins[0].lower()} requires {operand_count} operands and there is only {len(ins) - 1} operands"
-                )
-
-            if operand_count < 1:
-                return [converted[0] + "000"]
-
-            if not opcode[2]:
-                converted[0] += compiler.binary(int(ins[1], 2), 3)
-            else:
-                converted[0] += "000"
-                converted.append(ins[1].zfill(8))
-
-            for i in range(2, operand_count + 1):
-                converted.append(ins[i])
-
-            return converted
+            return compiler.binary(opcode[0], 5) + ins[1]
 
         def update_flags(self):
             if self.acc >= self.max_int:
