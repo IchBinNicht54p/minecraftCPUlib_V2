@@ -106,12 +106,13 @@ class Compiler:
                     self.error("too few arguements for set_port")
 
                 self.get_value(code[2], -1)
-                self.add_instruction(f"PST {binary(self.parse_datatype(code[1]))}")
+                self.add_instruction(f"PST {binary(self.parse_datatype(code[1]), 3)}")
             case "jump":
                 if len(code) <= 1:
                     self.error("too few arguements for jump")
 
-                self.add_instruction(f"JMP {binary(self.parse_datatype(code[1]))}")
+                self.add_instruction("JMP 000")
+                self.add_instruction(f"OPR {binary(self.parse_datatype(code[1]))}")
             case "if":
                 if len(code) <= 4:
                     self.error("too few arguements for if statement")
@@ -124,13 +125,15 @@ class Compiler:
         match con:
             case ">":
                 self.math("sub", b, a)
-                self.add_instruction(f"BRC 001 {binary(self.parse_datatype(addr))}")
+                self.add_instruction("BRC 001")
+                self.add_instruction(f"OPR {binary(self.parse_datatype(addr))}")
             case "<":
-                self.math("sub", a, b)
-                self.add_instruction(f"BRC 001 {binary(self.parse_datatype(addr))}")
+                self.add_instruction("BRC 001")
+                self.add_instruction(f"OPR {binary(self.parse_datatype(addr))}")
             case "==":
                 self.math("sub", a, b)
-                self.add_instruction(f"BRC 000 {binary(self.parse_datatype(addr))}")
+                self.add_instruction("BRC 000")
+                self.add_instruction(f"OPR {binary(self.parse_datatype(addr))}")
 
     def add_instruction(self, instruction: str):
         if self.mode == CompilerMode.FUNCTION:
@@ -143,9 +146,11 @@ class Compiler:
     def get_value(self, code: str, reg: int):
         match get_datatype(code):
             case "var":
-                self.add_instruction(f"MLD {binary(self.parse_datatype(code))}")
+                self.add_instruction("MLD 000")
+                self.add_instruction(f"OPR {binary(self.parse_datatype(code))}")
             case _:
-                self.add_instruction(f"LDI {binary(self.parse_datatype(code))}")
+                self.add_instruction("LDI 000")
+                self.add_instruction(f"OPR {binary(self.parse_datatype(code))}")
 
         if reg < 0:
             return
@@ -191,8 +196,9 @@ class Compiler:
         address = len(self.program) + self.program_flag_variable_index
         self.functions[self.current_function]["addr"] = address
 
+        self.add_instruction("JMP 000")
         self.add_instruction(
-            f"JMP {binary(self.get_function_end(self.current_function))}"
+            f"OPR {binary(self.get_function_end(self.current_function))}"
         )
 
         for line in code:
