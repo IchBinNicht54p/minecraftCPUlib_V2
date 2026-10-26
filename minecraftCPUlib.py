@@ -1,28 +1,8 @@
-import pygame
-from mcschematic import MCSchematic, Version
-from os import system, remove
-from time import sleep
+from sys import exit
 
-print("Minecraft CPU lib version 1.0(BETA)")
-
-barrels = [
-    "minecraft:barrel[facing=up]",
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b},{Slot:6b,id:"minecraft:wooden_axe",Count:1b},{Slot:7b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b},{Slot:6b,id:"minecraft:wooden_axe",Count:1b},{Slot:7b,id:"minecraft:wooden_axe",Count:1b},{Slot:8b,id:"minecraft:wooden_axe",Count:1b},{Slot:9b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b},{Slot:6b,id:"minecraft:wooden_axe",Count:1b},{Slot:7b,id:"minecraft:wooden_axe",Count:1b},{Slot:8b,id:"minecraft:wooden_axe",Count:1b},{Slot:9b,id:"minecraft:wooden_axe",Count:1b},{Slot:10b,id:"minecraft:wooden_axe",Count:1b},{Slot:11b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b},{Slot:6b,id:"minecraft:wooden_axe",Count:1b},{Slot:7b,id:"minecraft:wooden_axe",Count:1b},{Slot:8b,id:"minecraft:wooden_axe",Count:1b},{Slot:9b,id:"minecraft:wooden_axe",Count:1b},{Slot:10b,id:"minecraft:wooden_axe",Count:1b},{Slot:11b,id:"minecraft:wooden_axe",Count:1b},{Slot:12b,id:"minecraft:wooden_axe",Count:1b},{Slot:13b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b},{Slot:6b,id:"minecraft:wooden_axe",Count:1b},{Slot:7b,id:"minecraft:wooden_axe",Count:1b},{Slot:8b,id:"minecraft:wooden_axe",Count:1b},{Slot:9b,id:"minecraft:wooden_axe",Count:1b},{Slot:10b,id:"minecraft:wooden_axe",Count:1b},{Slot:11b,id:"minecraft:wooden_axe",Count:1b},{Slot:12b,id:"minecraft:wooden_axe",Count:1b},{Slot:13b,id:"minecraft:wooden_axe",Count:1b},{Slot:14b,id:"minecraft:wooden_axe",Count:1b},{Slot:15b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b},{Slot:6b,id:"minecraft:wooden_axe",Count:1b},{Slot:7b,id:"minecraft:wooden_axe",Count:1b},{Slot:8b,id:"minecraft:wooden_axe",Count:1b},{Slot:9b,id:"minecraft:wooden_axe",Count:1b},{Slot:10b,id:"minecraft:wooden_axe",Count:1b},{Slot:11b,id:"minecraft:wooden_axe",Count:1b},{Slot:12b,id:"minecraft:wooden_axe",Count:1b},{Slot:13b,id:"minecraft:wooden_axe",Count:1b},{Slot:14b,id:"minecraft:wooden_axe",Count:1b},{Slot:15b,id:"minecraft:wooden_axe",Count:1b},{Slot:16b,id:"minecraft:wooden_axe",Count:1b},{Slot:17b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b},{Slot:6b,id:"minecraft:wooden_axe",Count:1b},{Slot:7b,id:"minecraft:wooden_axe",Count:1b},{Slot:8b,id:"minecraft:wooden_axe",Count:1b},{Slot:9b,id:"minecraft:wooden_axe",Count:1b},{Slot:10b,id:"minecraft:wooden_axe",Count:1b},{Slot:11b,id:"minecraft:wooden_axe",Count:1b},{Slot:12b,id:"minecraft:wooden_axe",Count:1b},{Slot:13b,id:"minecraft:wooden_axe",Count:1b},{Slot:14b,id:"minecraft:wooden_axe",Count:1b},{Slot:15b,id:"minecraft:wooden_axe",Count:1b},{Slot:16b,id:"minecraft:wooden_axe",Count:1b},{Slot:17b,id:"minecraft:wooden_axe",Count:1b},{Slot:18b,id:"minecraft:wooden_axe",Count:1b},{Slot:19b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b},{Slot:6b,id:"minecraft:wooden_axe",Count:1b},{Slot:7b,id:"minecraft:wooden_axe",Count:1b},{Slot:8b,id:"minecraft:wooden_axe",Count:1b},{Slot:9b,id:"minecraft:wooden_axe",Count:1b},{Slot:10b,id:"minecraft:wooden_axe",Count:1b},{Slot:11b,id:"minecraft:wooden_axe",Count:1b},{Slot:12b,id:"minecraft:wooden_axe",Count:1b},{Slot:13b,id:"minecraft:wooden_axe",Count:1b},{Slot:14b,id:"minecraft:wooden_axe",Count:1b},{Slot:15b,id:"minecraft:wooden_axe",Count:1b},{Slot:16b,id:"minecraft:wooden_axe",Count:1b},{Slot:17b,id:"minecraft:wooden_axe",Count:1b},{Slot:18b,id:"minecraft:wooden_axe",Count:1b},{Slot:19b,id:"minecraft:wooden_axe",Count:1b},{Slot:20b,id:"minecraft:wooden_axe",Count:1b},{Slot:21b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b},{Slot:6b,id:"minecraft:wooden_axe",Count:1b},{Slot:7b,id:"minecraft:wooden_axe",Count:1b},{Slot:8b,id:"minecraft:wooden_axe",Count:1b},{Slot:9b,id:"minecraft:wooden_axe",Count:1b},{Slot:10b,id:"minecraft:wooden_axe",Count:1b},{Slot:11b,id:"minecraft:wooden_axe",Count:1b},{Slot:12b,id:"minecraft:wooden_axe",Count:1b},{Slot:13b,id:"minecraft:wooden_axe",Count:1b},{Slot:14b,id:"minecraft:wooden_axe",Count:1b},{Slot:15b,id:"minecraft:wooden_axe",Count:1b},{Slot:16b,id:"minecraft:wooden_axe",Count:1b},{Slot:17b,id:"minecraft:wooden_axe",Count:1b},{Slot:18b,id:"minecraft:wooden_axe",Count:1b},{Slot:19b,id:"minecraft:wooden_axe",Count:1b},{Slot:20b,id:"minecraft:wooden_axe",Count:1b},{Slot:21b,id:"minecraft:wooden_axe",Count:1b},{Slot:22b,id:"minecraft:wooden_axe",Count:1b},{Slot:23b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b},{Slot:6b,id:"minecraft:wooden_axe",Count:1b},{Slot:7b,id:"minecraft:wooden_axe",Count:1b},{Slot:8b,id:"minecraft:wooden_axe",Count:1b},{Slot:9b,id:"minecraft:wooden_axe",Count:1b},{Slot:10b,id:"minecraft:wooden_axe",Count:1b},{Slot:11b,id:"minecraft:wooden_axe",Count:1b},{Slot:12b,id:"minecraft:wooden_axe",Count:1b},{Slot:13b,id:"minecraft:wooden_axe",Count:1b},{Slot:14b,id:"minecraft:wooden_axe",Count:1b},{Slot:15b,id:"minecraft:wooden_axe",Count:1b},{Slot:16b,id:"minecraft:wooden_axe",Count:1b},{Slot:17b,id:"minecraft:wooden_axe",Count:1b},{Slot:18b,id:"minecraft:wooden_axe",Count:1b},{Slot:19b,id:"minecraft:wooden_axe",Count:1b},{Slot:20b,id:"minecraft:wooden_axe",Count:1b},{Slot:21b,id:"minecraft:wooden_axe",Count:1b},{Slot:22b,id:"minecraft:wooden_axe",Count:1b},{Slot:23b,id:"minecraft:wooden_axe",Count:1b},{Slot:24b,id:"minecraft:wooden_axe",Count:1b},{Slot:25b,id:"minecraft:wooden_axe",Count:1b}]}',
-    'barrel[facing=up]{Items:[{Slot:0b,id:"minecraft:wooden_axe",Count:1b},{Slot:1b,id:"minecraft:wooden_axe",Count:1b},{Slot:2b,id:"minecraft:wooden_axe",Count:1b},{Slot:3b,id:"minecraft:wooden_axe",Count:1b},{Slot:4b,id:"minecraft:wooden_axe",Count:1b},{Slot:5b,id:"minecraft:wooden_axe",Count:1b},{Slot:6b,id:"minecraft:wooden_axe",Count:1b},{Slot:7b,id:"minecraft:wooden_axe",Count:1b},{Slot:8b,id:"minecraft:wooden_axe",Count:1b},{Slot:9b,id:"minecraft:wooden_axe",Count:1b},{Slot:10b,id:"minecraft:wooden_axe",Count:1b},{Slot:11b,id:"minecraft:wooden_axe",Count:1b},{Slot:12b,id:"minecraft:wooden_axe",Count:1b},{Slot:13b,id:"minecraft:wooden_axe",Count:1b},{Slot:14b,id:"minecraft:wooden_axe",Count:1b},{Slot:15b,id:"minecraft:wooden_axe",Count:1b},{Slot:16b,id:"minecraft:wooden_axe",Count:1b},{Slot:17b,id:"minecraft:wooden_axe",Count:1b},{Slot:18b,id:"minecraft:wooden_axe",Count:1b},{Slot:19b,id:"minecraft:wooden_axe",Count:1b},{Slot:20b,id:"minecraft:wooden_axe",Count:1b},{Slot:21b,id:"minecraft:wooden_axe",Count:1b},{Slot:22b,id:"minecraft:wooden_axe",Count:1b},{Slot:23b,id:"minecraft:wooden_axe",Count:1b},{Slot:24b,id:"minecraft:wooden_axe",Count:1b},{Slot:25b,id:"minecraft:wooden_axe",Count:1b},{Slot:26b,id:"minecraft:wooden_axe",Count:1b}]}',
-]
+import compiler
+import display
+import isa
 
 
 def invert(val: int, max_int: int):
@@ -82,88 +62,6 @@ def convert_4_bits(bv: list, add: int = 0):
     return o2 + "\n"
 
 
-class Schematic:
-    def __init__(
-        self, compiled_code: list, distance: tuple = (2, 2, 2), max_x: int = 8
-    ):
-        with open("_temp", "w") as f:
-            f.write(compiled_code)
-
-        with open("_temp", "r") as f:
-            self.c = f.readlines()
-
-        remove("_temp")
-
-        self.d = distance
-        self.s = MCSchematic()
-        self.mx = max_x
-        self.mx1 = self.mx + 1
-        self.z = 0
-        self.a = 0
-        self.zs = 0
-        self.ci = 0
-
-    def binary(self, path: str = "Schematic", x: int = 0, y: int = 0, z: int = 0):
-        for ci in range(len(self.c)):
-            for bi in range(len(self.c[ci])):
-                match self.c[ci][invert(bi, len(self.c[ci]))]:
-                    case "1":
-                        b = "minecraft:redstone_block"
-                    case "0":
-                        b = "minecraft:stone"
-                    case _:
-                        b = "minecraft:air"
-                if self.z > 0:
-                    self.a = self.d[0]
-                    self.mx = self.mx1
-                else:
-                    self.a = 0
-                self.s.setBlock(
-                    (
-                        ((self.zs * self.d[0]) - self.a) + x,
-                        ((y + 1) - (len(self.c[ci]) * self.d[1])) + (bi * self.d[1]),
-                        z + (self.z * self.d[2]),
-                    ),
-                    b,
-                )
-            if self.zs > self.mx - 2:
-                self.z += 1
-                self.zs = 0
-            self.zs += 1
-
-        self.s.save("", path, Version.JE_1_18_2)
-
-    def hex(self, path: str = "Schematic", x: int = 0, y: int = 0, z: int = 0):
-        for ci in range(len(self.c)):
-            for bi in range(len(self.c[ci].split())):
-                b = barrels[
-                    int(self.c[ci].split()[invert(bi, len(self.c[ci].split()))])
-                ]
-                if self.z > 0:
-                    self.a = self.d[0]
-                    self.mx = self.mx1
-                else:
-                    self.a = 0
-                self.s.setBlock(
-                    (
-                        ((self.zs * self.d[0]) - self.a) + x,
-                        1
-                        + (
-                            (x + (bi * self.d[1]))
-                            - (len(self.c[ci].split()) * self.d[1])
-                        ),
-                        z + (self.z * self.d[2]),
-                    ),
-                    b,
-                )
-            if self.zs > self.mx - 2:
-                self.z += 1
-                self.zs = 0
-            self.zs += 1
-
-        self.s.save("", path, Version.JE_1_18_2)
-
-
 class Compile:
     def __init__(self, code: dict, ISA: dict):
         self.isa = ISA
@@ -172,8 +70,10 @@ class Compile:
     def to_binary(self):
         o = ""
         ix = 0
+
         for i in self.c:
             ins = 0
+
             for s in self.isa["instructions"]:
                 if s == i["id"]:
                     break
@@ -186,20 +86,27 @@ class Compile:
                 else:
                     o += f"{bin_bit_5_convert(ins)}{bin_op_convert(i['op'])}\n"
                     fins = 0
+
                     if i["op"] == 0:
                         f = "zero"
                     elif i["op"] == 1:
                         f = "cout"
+
                     for fn in self.isa["flags"]:
                         if fn == f:
                             break
+
                         fins += 1
+
                     o += f"{bin_op2_convert(fins)}"
             else:
                 o += f"{bin_bit_5_convert(ins)}{bin_op_convert(i['op'])}"
+
             if ix < len(self.c) - 1:
                 o += "\n"
+
             ix += 1
+
         return o
 
     def to_hex(self, add: int = 0):
@@ -214,8 +121,10 @@ class Compile:
         with open("temp", "r") as f:
             c = f.readlines()
             l = 0
+
             while l < len(c):
                 bl = []
+
                 for i in range(4):
                     try:
                         bl.append(c[i + l][:8])
@@ -230,64 +139,6 @@ class Compile:
 
 
 class CPU:
-    class display:
-        def __init__(self, pixels: tuple = (255, 255), pixel_size: int = 2):
-            self.p = pixels
-            self.s = pixel_size
-            self.pixel = []
-
-            for _ in range(pixels[0]):
-                self.pixel.append([0 for _ in range(pixels[1])])
-
-            pygame.init()
-
-            self.window = pygame.display.set_mode(
-                (self.p[0] * self.s, self.p[1] * self.s)
-            )
-
-            self.clock = pygame.time.Clock()
-            self.run = True
-
-        def draw(self):
-            self.window.fill("white")
-
-            for x in range(len(self.pixel)):
-                for y in range(len(self.pixel[x])):
-                    p = self.pixel[invert(y, len(self.pixel[x]))][x]
-
-                    if p == 0:
-                        c = "black"
-                    else:
-                        c = "white"
-
-                    pygame.draw.rect(
-                        self.window, c, (x * self.s, y * self.s, self.s, self.s)
-                    )
-
-        def change_pixel(self, pixel: tuple = (0, 0), on: bool = True):
-            if pixel[0] <= self.p[0] - 1 and pixel[1] <= self.p[1] - 1:
-                if on:
-                    self.pixel[pixel[0]][pixel[1]] = 1
-                else:
-                    self.pixel[pixel[0]][pixel[1]] = 0
-
-        def reset(self):
-            for x in range(len(self.pixel)):
-                for y in range(len(self.pixel[x])):
-                    self.pixel[x][y] = 0
-
-        def start(self, FPS: int = 60):
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.run = False
-
-            self.draw()
-            self.clock.tick(FPS)
-            pygame.display.flip()
-
-        def should_run(self):
-            return self.run
-
     class OP_1:
         def __init__(
             self,
@@ -297,48 +148,111 @@ class CPU:
             port_count: int,
             log_path: str,
             log: bool = True,
-            output_ports=False,
-            simulation_speed: int = 0,
         ):
             if not cpu_bits % 8:
                 pass
 
             self.bits = 8
+            self.ram_cells = ram_cells
+            self.register_count = register_count
+            self.port_count = port_count
             self.acc = 0
-            self.alu = 0
+            self.pc = 0
+
             self.flags = {"zero": False, "cout": False}
-            self.ram = [0 for _ in range(ram_cells)]
-            self.regs = [0 for _ in range(register_count)]
-            self.ports = [{"i": 0, "o": 0} for _ in range(port_count)]
+            self.ports = []
+            self.ram = []
+            self.regs = []
 
+            self.isa = isa.Isa(self)
+            self.display = None
+            self.enable_log = log
             self.max_int = (1 << self.bits) - 1
-            self.l = log
-            self.sim = []
-            self.po = output_ports
-            self.s = simulation_speed
 
-            if self.l:
-                with open("log.txt", "w") as f:
-                    f.write(
-                        f"*** init ***:\n\nSuccessfully created a new CPU object.\n\nCPU bits: {self.bits}\nCPU flags: {self.flags}\nCPU registers: {self.regs}\nCPU ports: {self.ports}\nCPU ram cells: {len(self.ram)}\n\n*** execution ***\n\n"
-                    )
+        def log(self, txt: str):
+            print(f"{txt}")
 
-        def log(self, msg: str):
-            with open("log.txt", "a") as f:
-                f.write(f"{msg}\n\n")
+        def init(self):
+            for _ in range(self.ram_cells):
+                self.ram.append(0)
+
+            for _ in range(self.register_count):
+                self.regs.append(0)
+
+            for _ in range(self.port_count):
+                self.ports.append({"i": 0, "o": 0})
+
+            self.log("init:\n")
+            self.log(f"CPU bits: {self.bits}")
+            self.log(f"CPU flags: {self.flags}")
+            self.log(f"CPU registers: {self.regs}")
+            self.log(f"CPU ports: {self.ports}")
+            self.log(f"CPU ram cells: {self.ram_cells}")
+
+        def compile(self, input_path: str, output_path: str):
+            print(f"compiling {input_path}")
+
+            c = ""
+
+            with open(input_path, "r") as f:
+                for line in f:
+                    if line.startswith(("#", "\n")) or len(line) < 1:
+                        continue
+
+                    l = self.compiler_parse_line(line)
+
+                    for number in l:
+                        c += chr(int(number, 2))
+
+            print(f"compiled {input_path}. writing output at {output_path} {len(c)}B")
+
+            with open(output_path, "w") as f:
+                f.write(c)
+
+        def compiler_parse_line(self, line: str) -> list[str]:
+            ins = line.split()
+
+            if not ins[0].lower() in self.isa.isa:
+                exit(f"opcode {ins[0].lower()} not found in isa")
+
+            opcode = self.isa.isa[ins[0].lower()]
+            operand_count = opcode[1]
+            converted = [compiler.binary(opcode[0], 5)]
+
+            if operand_count != len(ins) - 1:
+                exit(
+                    f"opcode {ins[0].lower()} requires {operand_count} operands and there is only {len(ins) - 1} operands"
+                )
+
+            if operand_count < 1:
+                return [converted[0] + "000"]
+
+            if not opcode[2]:
+                converted[0] += compiler.binary(int(ins[1], 2), 3)
+            else:
+                converted[0] += "000"
+                converted.append(ins[1].zfill(8))
+
+            for i in range(2, operand_count + 1):
+                converted.append(ins[i])
+
+            return converted
 
         def update_flags(self):
-            if self.alu >= self.max_int:
+            if self.acc >= self.max_int:
                 self.flags["cout"] = True
-                if self.alu > self.max_int:
-                    self.alu -= self.max_int
+
+                if self.acc > self.max_int:
+                    self.acc -= self.max_int
             else:
-                if self.alu == 0:
+                if self.acc == 0:
                     self.flags["zero"] = True
-                elif self.alu < 0:
-                    self.alu = 0
+                elif self.acc < 0:
+                    self.acc = 0
                     self.flags["zero"] = True
                 else:
                     self.flags["zero"] = False
+
                 self.flags["cout"] = False
+
             self.log(f"Updated flags: {self.flags}")
