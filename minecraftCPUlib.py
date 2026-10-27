@@ -5,139 +5,6 @@ import display
 import isa
 
 
-def invert(val: int, max_int: int):
-    return (max_int - val) - 1
-
-
-def bin_bit_5_convert(val: int):
-    if val > (1 << 5) - 1:
-        val = (1 << 5) - 1
-
-    return f"{val:05b}"
-
-
-def bin_op_convert(op: int):
-    if op > (1 << 3) - 1:
-        op = (1 << 3) - 1
-
-    return f"{op:03b}"
-
-
-def bin_op2_convert(op: int):
-    if op > (1 << 8) - 1:
-        op = (1 << 8) - 1
-
-    return f"{op:08b}"
-
-
-def horiz_bin_to_dec(bv: list):
-    v = 0
-
-    for d in range(len(bv)):
-        if bv[d] == "1":
-            v += 1 << invert(d, len(bv))
-
-    return v
-
-
-def convert_4_bits(bv: list, add: int = 0):
-    o = []
-
-    for i in range(len(bv[0])):
-        l = []
-
-        for j in range(4):
-            l.append(bv[j][i])
-
-        o.append((horiz_bin_to_dec(l) + add))
-
-    o2 = ""
-
-    for i in range(len(o)):
-        o2 += f"{o[i]}"
-
-        if i < len(o) - 1:
-            o2 += " "
-
-    return o2 + "\n"
-
-
-class Compile:
-    def __init__(self, code: dict, ISA: dict):
-        self.isa = ISA
-        self.c = code
-
-    def to_binary(self):
-        o = ""
-        ix = 0
-
-        for i in self.c:
-            ins = 0
-
-            for s in self.isa["instructions"]:
-                if s == i["id"]:
-                    break
-                ins += 1
-
-            if i["id"] in ["ldi"]:
-                if i["id"] in ["ldi", "jmp"]:
-                    o += f"{bin_bit_5_convert(ins)}000\n"
-                    o += f"{bin_op2_convert(i['op'])}"
-                else:
-                    o += f"{bin_bit_5_convert(ins)}{bin_op_convert(i['op'])}\n"
-                    fins = 0
-
-                    if i["op"] == 0:
-                        f = "zero"
-                    elif i["op"] == 1:
-                        f = "cout"
-
-                    for fn in self.isa["flags"]:
-                        if fn == f:
-                            break
-
-                        fins += 1
-
-                    o += f"{bin_op2_convert(fins)}"
-            else:
-                o += f"{bin_bit_5_convert(ins)}{bin_op_convert(i['op'])}"
-
-            if ix < len(self.c) - 1:
-                o += "\n"
-
-            ix += 1
-
-        return o
-
-    def to_hex(self, add: int = 0):
-        b = self.to_binary()
-
-        with open("temp", "w") as f:
-            f.write(b)
-
-        o = ""
-        i = 0
-
-        with open("temp", "r") as f:
-            c = f.readlines()
-            l = 0
-
-            while l < len(c):
-                bl = []
-
-                for i in range(4):
-                    try:
-                        bl.append(c[i + l][:8])
-                    except IndexError:
-                        bl.append("0" * 8)
-
-                o += convert_4_bits(bl, add=add)
-                l += 4
-
-        remove("temp")  # <-----
-        return o
-
-
 class CPU:
     class OP_1:
         def __init__(
@@ -209,6 +76,9 @@ class CPU:
 
             self.log(f"loaded {len(self.isa_cache)} instructions into isa_cache")
 
+        def dud(self):
+            self.pc += 1
+
         def load_program(self, program: str):
             i = 0
 
@@ -239,10 +109,19 @@ class CPU:
                 self.program.append([ins["f"], args])
                 self.log(f"program += {ins['n']}{args}")
 
+                for j in range(ins["operands"] - 1):
+                    self.program.append([self.dud, []])
+
+                    self.log("added dud")
+
                 if ins["operands"] < 2:
                     i += 1
                 else:
                     i += ins["operands"]
+
+            self.log(
+                f"program length: {len(program)}, instructions: {len(self.program)}"
+            )
 
         def run(self):
             print("executing CPU")
