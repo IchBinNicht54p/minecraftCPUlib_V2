@@ -193,7 +193,7 @@ class Compiler:
 
         self.mode = CompilerMode.DEFAULT
         code = self.functions[self.current_function]["code"]
-        address = len(self.program) + self.program_flag_variable_index
+        address = len(self.program) + self.program_flag_init_end
         self.functions[self.current_function]["addr"] = address
 
         self.add_instruction("JMP 000")
